@@ -1,0 +1,81 @@
+﻿@page "/"
+@using Battleships.Models;
+
+<PageTitle>Battleships</PageTitle>
+
+<div class="stage">
+    <div class="grid">
+        @foreach (var row in game.PlayerStage.Cells)
+        {
+            <div class="row">
+                @foreach (var cell in row)
+                {
+                    //<div class="image-button @cell.ShipPart.HasValue"></div>
+                    <div class="image-button @cell.Status"></div>
+                    @*<ImageButton ImageUrl="images/button.png" OnClick="@(() => OnButtonClicked(row, col))" />*@
+                }
+            </div>
+        }
+    </div>
+
+    <div class="grid">
+        @foreach (var row in game.ComputerStage.Cells)
+        {
+            <div class="row">
+                @foreach (var cell in row)
+                {
+                    <div class="image-button @cell.Status" onclick="@(() => OnButtonClicked(cell))"></div>
+                    @*<ImageButton ImageUrl="images/button.png" OnClick="@(() => OnButtonClicked(row, col))" />*@
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<div>
+    <button onclick="@(() => NewGame())">New Game</button>
+</div>
+
+@code {
+    Game game = new Game("krysztal");
+    int[] columns = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    int[] rows = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+
+    protected override void OnInitialized()
+    {
+        //cells = GenetareStage();
+    }
+
+    private void OnButtonClicked(Cell cell)
+    {
+        Console.WriteLine($"{cell.X}, {cell.Y}, {cell.ShipPart}");
+        if(cell.Ship != null)
+        {
+            cell.Ship.Parts[cell.ShipPart!.Value] = true;
+            if (cell.Ship.Parts.All(x => x))
+            {
+                foreach(var shipCell in cell.Ship.Cells)
+                {
+                    shipCell.Status = CellStatus.ShipDestroyed;
+                }
+            }
+            else
+            {
+                cell.Status = CellStatus.ShipPartDestroyed;
+            }
+        }
+        else
+        {
+            cell.Status = CellStatus.Hit;
+        }
+
+        StateHasChanged();
+    }
+
+
+    private void NewGame()
+    {
+        game.Restart();
+    }
+}
