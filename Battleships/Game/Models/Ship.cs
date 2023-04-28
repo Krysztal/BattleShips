@@ -1,4 +1,4 @@
-﻿namespace Battleships.Models;
+﻿namespace Battleships.Game.Models;
 
 public class Ship
 {

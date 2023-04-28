@@ -152,9 +152,34 @@ a, .btn-link {
     max-height: 100%;
 }
 
+.player-name {
+    display: flex;
+    position: fixed;
+    margin-top: -25px;
+}
+
+.computer-name {
+    display: flex;
+    position: fixed;
+    margin-top: -25px;
+}
+
+.buttons-panel {
+    margin-top: 20px;
+    align-items: center;
+    display: grid;
+}
+
+.new-game-button {
+    border: 1px solid #d6d5d5;
+    color: darkslategray;
+    margin: auto;
+}
+
 .stage {
     display: flex;
     justify-content: center;
+    margin-top: 20px;
 }
 
 .True {
@@ -169,18 +194,19 @@ a, .btn-link {
     background-color: white;
 }
 
-.Hit {
-    background-color: lightgrey;
-}
-
 .OpenShip {
     background-color: antiquewhite;
 }
 
 .ShipPartDestroyed {
-    background-color: orange;
+    background-color: darkorange;
 }
 
 .ShipDestroyed {
-    background-color: orangered;
+    background-color: red;
+}
+
+.Miss::before {
+    content: 'x';
+    color: black;
 }

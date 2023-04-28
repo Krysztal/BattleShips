@@ -1,10 +1,10 @@
-﻿namespace Battleships.Models;
+﻿namespace Battleships.Game.Models;
 
 public enum CellStatus
 {
     Open,
     Close,
-    Hit,
+    Miss,
     OpenShip,
     ShipPartDestroyed,
     ShipDestroyed

@@ -1,26 +1,19 @@
-﻿namespace Battleships.Models;
+﻿namespace Battleships.Game.Models;
 
 public class Stage
 {
-    private const int Size = 10;
+    public readonly int Size = 10;
 
     public string Player { get; private set; }
+
     public Cell[][] Cells { get; private set; }
 
     public Ship[] Ships { get; private set; } = new Ship[3];
 
-    public Stage(string player) 
+    public Stage(string player)
     {
         Player = player;
-        Cells = new Cell[Size][];
-        for(int x = 0; x < Size; x++)
-        {
-            Cells[x] = new Cell[Size];
-            for(int y = 0; y < Size; y++)
-            {
-                Cells[x][y] = new Cell(x, y);
-            }
-        }
+        Cells = GenerateCells();
     }
 
     public void GenerateShips()
@@ -60,6 +53,7 @@ public class Stage
             // randomly choose orientation and starting position
             var seed = (int)DateTime.Now.Ticks;
             bool isHorizontal = new Random(seed).Next(2) == 0;
+
             seed = (int)DateTime.Now.Ticks;
             int x = new Random(seed).Next(9);
             seed = (int)DateTime.Now.Ticks;
@@ -72,7 +66,7 @@ public class Stage
                 int checkX = isHorizontal ? x + j : x;
                 int checkY = isHorizontal ? y : y + j;
 
-                if (checkX >= Size || checkY >= Size || (Cells[checkX][checkY].ShipPart is not null))
+                if (checkX >= Size || checkY >= Size || Cells[checkX][checkY].ShipPart is not null)
                 {
                     canPlaceShip = false;
                     break;
@@ -96,5 +90,20 @@ public class Stage
         }
 
         return ship;
+    }
+
+    private Cell[][] GenerateCells()
+    {
+        var cells = new Cell[Size][];
+        for (int x = 0; x < Size; x++)
+        {
+            Cells[x] = new Cell[Size];
+            for (int y = 0; y < Size; y++)
+            {
+                Cells[x][y] = new Cell(x, y);
+            }
+        }
+
+        return cells;
     }
 }

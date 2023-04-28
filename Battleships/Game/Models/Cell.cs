@@ -1,4 +1,4 @@
-﻿namespace Battleships.Models;
+﻿namespace Battleships.Game.Models;
 
 public class Cell
 {
@@ -7,6 +7,7 @@ public class Cell
     public CellStatus Status { get; set; } = CellStatus.Open;
     public int? ShipPart { get; set; }
     public Ship? Ship { get; set; }
+    public bool IsShipPlaced => Ship != null;
 
     public Cell(int x, int y)
     {

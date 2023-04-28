@@ -1,78 +1,53 @@
 ﻿@page "/"
-@using Battleships.Models;
+@using Battleships.Game;
+@using Battleships.Game.Models;
 
 <PageTitle>Battleships</PageTitle>
 
 <div class="stage">
     <div class="grid">
+        <span class="player-name">@game.PlayerName</span>
         @foreach (var row in game.PlayerStage.Cells)
         {
             <div class="row">
                 @foreach (var cell in row)
                 {
-                    //<div class="image-button @cell.ShipPart.HasValue"></div>
                     <div class="image-button @cell.Status"></div>
-                    @*<ImageButton ImageUrl="images/button.png" OnClick="@(() => OnButtonClicked(row, col))" />*@
                 }
             </div>
         }
     </div>
 
     <div class="grid">
+        <div class="computer-name">Computer</div>
         @foreach (var row in game.ComputerStage.Cells)
         {
             <div class="row">
                 @foreach (var cell in row)
                 {
-                    <div class="image-button @cell.Status" onclick="@(() => OnButtonClicked(cell))"></div>
-                    @*<ImageButton ImageUrl="images/button.png" OnClick="@(() => OnButtonClicked(row, col))" />*@
+                    <div class="image-button @cell.Status" onclick="@(() => ShootClicked(cell))"></div>
                 }
             </div>
         }
     </div>
 </div>
 
-<div>
-    <button onclick="@(() => NewGame())">New Game</button>
+<div class="buttons-panel">
+    <button type="button" class="new-game-button" onclick="@(() => NewGame())">New Game</button>
 </div>
 
 @code {
-    Game game = new Game("krysztal");
-    int[] columns = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    int[] rows = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    Game game = new Game("PlayerName");
 
-
-    protected override void OnInitialized()
+    private void ShootClicked(Cell cell)
     {
-        //cells = GenetareStage();
-    }
-
-    private void OnButtonClicked(Cell cell)
-    {
-        Console.WriteLine($"{cell.X}, {cell.Y}, {cell.ShipPart}");
-        if(cell.Ship != null)
+        if(game.IsShootInProgress == false)
         {
-            cell.Ship.Parts[cell.ShipPart!.Value] = true;
-            if (cell.Ship.Parts.All(x => x))
-            {
-                foreach(var shipCell in cell.Ship.Cells)
-                {
-                    shipCell.Status = CellStatus.ShipDestroyed;
-                }
-            }
-            else
-            {
-                cell.Status = CellStatus.ShipPartDestroyed;
-            }
-        }
-        else
-        {
-            cell.Status = CellStatus.Hit;
-        }
+            game.Shoot(cell);
 
-        StateHasChanged();
+            StateHasChanged();
+        }
     }
-
 
     private void NewGame()
     {
