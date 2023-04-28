@@ -5,7 +5,7 @@ namespace Battleships.Game;
 public sealed class Game : IGame
 {
     private const string Player = "Computer";
-    private static readonly CellStatus[] _foundStatuses = new CellStatus[] { CellStatus.ShipPartDestroyed, CellStatus.ShipDestroyed, CellStatus.Miss };
+    private static readonly CellStatus[] _foundStatuses = new CellStatus[] { CellStatus.Destroyed, CellStatus.ShipDestroyed, CellStatus.Miss };
 
     public string PlayerName { get; init; }
     public bool IsShootInProgress { get; private set; }
@@ -32,24 +32,22 @@ public sealed class Game : IGame
 
     public void Shoot(Cell cell)
     {
+        if (Status == GameStatus.PlayerWon || Status == GameStatus.ComputerWon)
+            return;
         if (IsAlreadyShot(cell.X, cell.Y))
             return;
 
         IsShootInProgress = true;
         if (cell.IsShipPlaced)
         {
-            cell.Ship!.Parts[cell.ShipPart!.Value] = true;
-            if (cell.Ship.IsDestroyed)
+            cell.Status = CellStatus.Destroyed;
+            if (cell.Ship!.IsDestroyed)
             {
                 MarkShipAsDestroyed(cell.Ship);
                 if (GetEnemyBoard().Ships.All(x => x.IsDestroyed))
                 {
                     SetWinner();
                 }
-            }
-            else
-            {
-                cell.Status = CellStatus.ShipPartDestroyed;
             }
 
             if (Status == GameStatus.ComputerTurn)

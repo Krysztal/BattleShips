@@ -41,8 +41,7 @@ public class Board
     {
         var ship = new Ship()
         {
-            Cells = new Cell[size],
-            Parts = new bool[size]
+            Cells = new Cell[size]
         };
 
         bool shipPlaced = false;

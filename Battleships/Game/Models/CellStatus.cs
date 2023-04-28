@@ -6,6 +6,6 @@ public enum CellStatus
     Close,
     Miss,
     OpenShip,
-    ShipPartDestroyed,
+    Destroyed,
     ShipDestroyed
 }
