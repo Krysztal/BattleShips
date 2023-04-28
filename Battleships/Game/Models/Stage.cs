@@ -97,10 +97,10 @@ public class Stage
         var cells = new Cell[Size][];
         for (int x = 0; x < Size; x++)
         {
-            Cells[x] = new Cell[Size];
+            cells[x] = new Cell[Size];
             for (int y = 0; y < Size; y++)
             {
-                Cells[x][y] = new Cell(x, y);
+                cells[x][y] = new Cell(x, y);
             }
         }
 
