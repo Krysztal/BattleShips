@@ -5,9 +5,9 @@
 <PageTitle>Battleships</PageTitle>
 
 <div class="stage">
-    <div class="grid">
+    <div class="board">
         <span class="player-name">@game.PlayerName</span>
-        @foreach (var row in game.PlayerStage.Cells)
+        @foreach (var row in game.PlayerBoard.Cells)
         {
             <div class="row">
                 @foreach (var cell in row)
@@ -18,9 +18,9 @@
         }
     </div>
 
-    <div class="grid">
+    <div class="board">
         <div class="computer-name">Computer</div>
-        @foreach (var row in game.ComputerStage.Cells)
+        @foreach (var row in game.ComputerBoard.Cells)
         {
             <div class="row">
                 @foreach (var cell in row)

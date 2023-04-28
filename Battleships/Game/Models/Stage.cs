@@ -1,6 +1,6 @@
 ﻿namespace Battleships.Game.Models;
 
-public class Stage
+public class Board
 {
     public readonly int Size = 10;
 
@@ -10,7 +10,7 @@ public class Stage
 
     public Ship[] Ships { get; private set; } = new Ship[3];
 
-    public Stage(string player)
+    public Board(string player)
     {
         Player = player;
         Cells = GenerateCells();
@@ -55,9 +55,9 @@ public class Stage
             bool isHorizontal = new Random(seed).Next(2) == 0;
 
             seed = (int)DateTime.Now.Ticks;
-            int x = new Random(seed).Next(9);
+            int x = new Random(seed).Next(Size);
             seed = (int)DateTime.Now.Ticks;
-            int y = new Random(seed).Next(9);
+            int y = new Random(seed).Next(Size);
 
             // check if ship can be placed in chosen position
             bool canPlaceShip = true;

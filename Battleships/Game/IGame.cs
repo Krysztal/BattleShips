@@ -4,9 +4,9 @@ namespace Battleships.Game;
 
 public interface IGame
 {
-    Stage ComputerStage { get; }
+    Board ComputerBoard { get; }
     bool IsShootInProgress { get; }
-    Stage PlayerStage { get; }
+    Board PlayerBoard { get; }
     GameStatus Status { get; }
 
     void Restart();
