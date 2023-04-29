@@ -5,13 +5,13 @@ namespace Battleships.Game;
 public sealed class Game : IGame
 {
     private const string Player = "Computer";
-    private static readonly CellStatus[] _foundStatuses = new CellStatus[] { CellStatus.Destroyed, CellStatus.ShipDestroyed, CellStatus.Miss };
+    private static readonly CellStatus[] _foundStatuses = new CellStatus[] { CellStatus.Hit, CellStatus.ShipSunk, CellStatus.Miss };
 
     public string PlayerName { get; init; }
     public bool IsShootInProgress { get; private set; }
     public GameStatus Status { get; private set; } = GameStatus.PlayerTurn;
-    public Board ComputerBoard { get; private set; } = default!;
     public Board PlayerBoard { get; private set; } = default!;
+    public Board ComputerBoard { get; private set; } = default!;
 
     public Game(string playerName)
     {
@@ -21,11 +21,11 @@ public sealed class Game : IGame
 
     public void Restart()
     {
-        ComputerBoard = new Board(Player);
-        ComputerBoard.GenerateShips();
-        ComputerBoard.Hide();
-        PlayerBoard = new Board(PlayerName);
-        PlayerBoard.GenerateShips();
+        PlayerBoard = new Board(Player);
+        PlayerBoard.PlaceShips();
+        PlayerBoard.Hide();
+        ComputerBoard = new Board(PlayerName);
+        ComputerBoard.PlaceShips();
         Status = GameStatus.PlayerTurn;
         IsShootInProgress = false;
     }
@@ -40,11 +40,11 @@ public sealed class Game : IGame
         IsShootInProgress = true;
         if (cell.IsShipPlaced)
         {
-            cell.Status = CellStatus.Destroyed;
-            if (cell.Ship!.IsDestroyed)
+            cell.Status = CellStatus.Hit;
+            if (cell.Ship!.IsSunk)
             {
                 MarkShipAsDestroyed(cell.Ship);
-                if (GetEnemyBoard().Ships.All(x => x.IsDestroyed))
+                if (GetEnemyBoard().Ships.All(x => x.IsSunk))
                 {
                     SetWinner();
                 }
@@ -74,6 +74,7 @@ public sealed class Game : IGame
         Shoot(GetEnemyBoard().Cells[x][y]);
     }
 
+    //very simple algorithm
     private void ComputerShoot()
     {
         var isShot = true;
@@ -82,8 +83,8 @@ public sealed class Game : IGame
 
         while (isShot)
         {
-            x = Random.Shared.Next(PlayerBoard.Size);
-            y = Random.Shared.Next(PlayerBoard.Size);
+            x = Random.Shared.Next(ComputerBoard.Size);
+            y = Random.Shared.Next(ComputerBoard.Size);
             isShot = IsAlreadyShot(x, y);
         }
 
@@ -98,15 +99,12 @@ public sealed class Game : IGame
 
     private Board GetEnemyBoard()
     {
-        switch (Status)
+        return Status switch
         {
-            case GameStatus.PlayerTurn:
-                return ComputerBoard;
-            case GameStatus.ComputerTurn:
-                return PlayerBoard;
-        }
-
-        throw new NotImplementedException($"GetEnemyBoard does not support {Status} status.");
+            GameStatus.PlayerTurn => PlayerBoard,
+            GameStatus.ComputerTurn => ComputerBoard,
+            _ => throw new NotImplementedException($"GetEnemyBoard does not support {Status} status."),
+        };
     }
 
     private void ChangeGameTurn()
@@ -125,21 +123,17 @@ public sealed class Game : IGame
     {
         foreach (var shipCell in ship.Cells)
         {
-            shipCell.Status = CellStatus.ShipDestroyed;
+            shipCell.Status = CellStatus.ShipSunk;
         }
     }
 
     private void SetWinner()
     {
-        switch (Status)
+        Status = Status switch
         {
-            case GameStatus.PlayerTurn:
-                Status = GameStatus.PlayerWon;
-                break;
-            case GameStatus.ComputerTurn:
-                Status = GameStatus.ComputerWon;
-                break;
-            default: throw new NotImplementedException($"SetWinner does not support {Status} status.");
-        }
+            GameStatus.PlayerTurn => GameStatus.PlayerWon,
+            GameStatus.ComputerTurn => GameStatus.ComputerWon,
+            _ => throw new NotImplementedException($"SetWinner does not support {Status} status."),
+        };
     }
 }

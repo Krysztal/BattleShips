@@ -182,11 +182,7 @@ a, .btn-link {
     margin-top: 20px;
 }
 
-.True {
-    background-color: antiquewhite;
-}
-
-.Empty {
+.Open {
     background-color: white;
 }
 
@@ -198,15 +194,30 @@ a, .btn-link {
     background-color: antiquewhite;
 }
 
-.Destroyed {
+.Hit {
     background-color: darkorange;
 }
 
-.ShipDestroyed {
+.ShipSunk {
     background-color: red;
 }
 
 .Miss::before {
     content: 'x';
     color: black;
+}
+
+.game-status {
+    text-align: center;
+    height: 20px;
+    margin-top: 20px;
+    color: darkslategray;
+}
+
+.game-status.PlayerWon {
+    color: green;
+}
+
+.game-status.ComputerWon {
+    color: red;
 }

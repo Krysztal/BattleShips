@@ -7,7 +7,7 @@
 <div class="stage">
     <div class="board">
         <span class="player-name">@game.PlayerName</span>
-        @foreach (var row in game.PlayerBoard.Cells)
+        @foreach (var row in game.ComputerBoard.Cells)
         {
             <div class="row">
                 @foreach (var cell in row)
@@ -20,7 +20,7 @@
 
     <div class="board">
         <div class="computer-name">Computer</div>
-        @foreach (var row in game.ComputerBoard.Cells)
+        @foreach (var row in game.PlayerBoard.Cells)
         {
             <div class="row">
                 @foreach (var cell in row)
@@ -31,6 +31,14 @@
         }
     </div>
 </div>
+
+<div class="game-status @game.Status">
+    @if (@game.Status == GameStatus.PlayerWon || @game.Status == GameStatus.ComputerWon)
+    {
+        <span>@game.Status!</span>
+    }
+</div>
+
 
 <div class="buttons-panel">
     <button type="button" class="new-game-button" onclick="@(() => NewGame())">New Game</button>

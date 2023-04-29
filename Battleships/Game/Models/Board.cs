@@ -1,6 +1,6 @@
 ﻿namespace Battleships.Game.Models;
 
-public class Board
+public sealed class Board
 {
     public readonly int Size = 10;
 
@@ -16,12 +16,12 @@ public class Board
         Cells = GenerateCells();
     }
 
-    public void GenerateShips()
+    public void PlaceShips()
     {
         var ships = new Ship[3];
-        ships[0] = GenerateShip(6);
-        ships[1] = GenerateShip(5);
-        ships[2] = GenerateShip(5);
+        ships[0] = PlaceShip(6);
+        ships[1] = PlaceShip(5);
+        ships[2] = PlaceShip(5);
 
         Ships = ships;
     }
@@ -37,7 +37,7 @@ public class Board
         }
     }
 
-    private Ship GenerateShip(int size)
+    private Ship PlaceShip(int size)
     {
         var ship = new Ship()
         {
@@ -46,7 +46,6 @@ public class Board
 
         bool shipPlaced = false;
 
-        // keep trying to place ship until successful
         while (!shipPlaced)
         {
             // randomly choose orientation and starting position

@@ -1,6 +1,6 @@
 ﻿namespace Battleships.Game.Models;
 
-public class Cell
+public sealed class Cell
 {
     public int X { get; set; }
     public int Y { get; set; }

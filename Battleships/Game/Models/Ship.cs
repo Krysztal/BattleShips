@@ -1,8 +1,8 @@
 ﻿namespace Battleships.Game.Models;
 
-public class Ship
+public sealed class Ship
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public required Cell[] Cells { get; init; }
-    public bool IsDestroyed => Cells.All(x => x.Status == CellStatus.Destroyed || x.Status == CellStatus.ShipDestroyed);
+    public bool IsSunk => Cells.All(x => x.Status == CellStatus.Hit || x.Status == CellStatus.ShipSunk);
 }
