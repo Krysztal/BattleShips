@@ -3,6 +3,7 @@
 public sealed class Board
 {
     public readonly int Size = 10;
+    private readonly IRandomizer _randomizer;
 
     public string Player { get; private set; }
 
@@ -10,9 +11,10 @@ public sealed class Board
 
     public Ship[] Ships { get; private set; } = new Ship[3];
 
-    public Board(string player)
+    public Board(string player, IRandomizer randomizer)
     {
         Player = player;
+        _randomizer = randomizer;
         Cells = GenerateCells();
     }
 
@@ -49,13 +51,14 @@ public sealed class Board
         while (!shipPlaced)
         {
             // randomly choose orientation and starting position
-            var seed = (int)DateTime.Now.Ticks;
-            bool isHorizontal = new Random(seed).Next(2) == 0;
+            bool isHorizontal = _randomizer.Next(2) == 0;
+            int x = _randomizer.Next(Size);
+            int y = _randomizer.Next(Size);
 
-            seed = (int)DateTime.Now.Ticks;
-            int x = new Random(seed).Next(Size);
-            seed = (int)DateTime.Now.Ticks;
-            int y = new Random(seed).Next(Size);
+            //seed = (int)DateTime.Now.Ticks;
+            //int x = new Random(seed).Next(Size);
+            //seed = (int)DateTime.Now.Ticks;
+            //int y = new Random(seed).Next(Size);
 
             // check if ship can be placed in chosen position
             bool canPlaceShip = true;

@@ -4,7 +4,8 @@ namespace Battleships.Game;
 
 public sealed class Game : IGame
 {
-    private const string Player = "Computer";
+    private const string _computerName = "Computer";
+    private readonly IRandomizer _randomizer;
     private static readonly CellStatus[] _foundStatuses = new CellStatus[] { CellStatus.Hit, CellStatus.ShipSunk, CellStatus.Miss };
 
     public string PlayerName { get; init; }
@@ -13,18 +14,19 @@ public sealed class Game : IGame
     public Board PlayerBoard { get; private set; } = default!;
     public Board ComputerBoard { get; private set; } = default!;
 
-    public Game(string playerName)
+    public Game(string playerName, IRandomizer randomizer)
     {
         PlayerName = playerName;
+        _randomizer = randomizer;
         Restart();
     }
 
     public void Restart()
     {
-        PlayerBoard = new Board(Player);
+        PlayerBoard = new Board(PlayerName, _randomizer);
         PlayerBoard.PlaceShips();
         PlayerBoard.Hide();
-        ComputerBoard = new Board(PlayerName);
+        ComputerBoard = new Board(_computerName, _randomizer);
         ComputerBoard.PlaceShips();
         Status = GameStatus.PlayerTurn;
         IsShootInProgress = false;
@@ -83,8 +85,8 @@ public sealed class Game : IGame
 
         while (isShot)
         {
-            x = Random.Shared.Next(ComputerBoard.Size);
-            y = Random.Shared.Next(ComputerBoard.Size);
+            x = _randomizer.Next(ComputerBoard.Size);
+            y = _randomizer.Next(ComputerBoard.Size);
             isShot = IsAlreadyShot(x, y);
         }
 

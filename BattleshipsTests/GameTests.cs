@@ -9,7 +9,7 @@ public class GameTests
     [SetUp]
     public void Setup()
     {
-        _game = new Game("Me");
+        _game = new Game("Me", new Randomizer());
     }
 
     [Test]
